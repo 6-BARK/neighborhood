@@ -19,6 +19,14 @@
 
 > Some usage instructions
 
+### CRUD
+
+database/index.js
+- save(listing): creates a new listing with the given info
+- fetch(): retrieves all listings
+- update(listing): updates a listing if it exists, otherwise creates a new one with the given info
+- remove(listing): removes a listing
+
 ## Requirements
 
 An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
