@@ -22,7 +22,7 @@
 ### API routes
 
 #### POST '/api/neighborhoods'
--request body : {
+- request body : {
   id: Number,
   name: String,
   valueShift: Number,
@@ -31,10 +31,10 @@
   walkScore: Number,
   transitScore: Number,
 }
--response (201)
+- response (201)
 
 #### POST '/api/neighborhoods/:id1/listing/:id2'
--request body: {
+- request body: {
   id: Number,
   username: String,
   password: String,
@@ -45,11 +45,11 @@
   bedrooms: Number,
   bathrooms: Number
 }
--response (201)
+- response (201)
 
 #### GET '/api/neighborhoods'
--request body: NONE
--response (200): {
+- request body: NONE
+- response (200): {
   id: Number,
   name: String,
   valueShift: Number,
@@ -60,8 +60,8 @@
 }
 
 #### GET '/api/neighborhoods/:id1/listings/:id2'
--request body: none
--response (200): {
+- request body: none
+- response (200): {
   id: Number,
   userName: String,
   address: String,
@@ -73,7 +73,7 @@
 }
 
 #### PUT '/api/neighborhoods/:id'
--request body: {
+- request body: {
   id: Number,
   name: String,
   valueShift: Number,
@@ -82,10 +82,10 @@
   walkScore: Number,
   transitScore: Number
 }
--response (200)
+- response (200)
 
 #### PUT '/api/neighborhoods/:id1/listings/:id2'
--request body: {
+- request body: {
   id: Number,
   userName: String,
   address: String,
@@ -95,18 +95,18 @@
   bedrooms: Number,
   bathrooms: Number
 }
--response (200)
+- response (200)
 
 #### DELETE '/api/neighborhoods/:id'
--request body: NONE
--response (200)
+- request body: NONE
+- response (200)
 
 #### DELETE '/api/neighborhoods/:id'
--request body: {
+- request body: {
   username: String,
   password: String
 }
--response (200)
+- response (200)
 
 ## Requirements
 
