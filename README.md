@@ -21,7 +21,7 @@
 
 ### API routes
 
-POST '/api/neighborhoods'
+#### POST '/api/neighborhoods'
 -request body : {
   id: Number,
   name: String,
@@ -33,7 +33,7 @@ POST '/api/neighborhoods'
 }
 -response (201)
 
-POST '/api/neighborhoods/:id1/listing/:id2'
+#### POST '/api/neighborhoods/:id1/listing/:id2'
 -request body: {
   id: Number,
   username: String,
@@ -47,7 +47,7 @@ POST '/api/neighborhoods/:id1/listing/:id2'
 }
 -response (201)
 
-GET '/api/neighborhoods'
+#### GET '/api/neighborhoods'
 -request body: NONE
 -response (200): {
   id: Number,
@@ -59,7 +59,7 @@ GET '/api/neighborhoods'
   transitScore: Number,
 }
 
-GET '/api/neighborhoods/:id1/listings/:id2'
+#### GET '/api/neighborhoods/:id1/listings/:id2'
 -request body: none
 -response (200): {
   id: Number,
@@ -72,7 +72,7 @@ GET '/api/neighborhoods/:id1/listings/:id2'
   bathrooms: Number
 }
 
-PUT '/api/neighborhoods/:id'
+#### PUT '/api/neighborhoods/:id'
 -request body: {
   id: Number,
   name: String,
@@ -84,7 +84,7 @@ PUT '/api/neighborhoods/:id'
 }
 -response (200)
 
-PUT '/api/neighborhoods/:id1/listings/:id2'
+#### PUT '/api/neighborhoods/:id1/listings/:id2'
 -request body: {
   id: Number,
   userName: String,
@@ -97,11 +97,11 @@ PUT '/api/neighborhoods/:id1/listings/:id2'
 }
 -response (200)
 
-DELETE '/api/neighborhoods/:id'
+#### DELETE '/api/neighborhoods/:id'
 -request body: NONE
 -response (200)
 
-DELETE '/api/neighborhoods/:id'
+#### DELETE '/api/neighborhoods/:id'
 -request body: {
   username: String,
   password: String
