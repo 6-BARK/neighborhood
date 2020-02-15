@@ -10,9 +10,6 @@ const nearbyImages = ['https://7-xillow.s3-us-west-1.amazonaws.com/img1.jpeg', '
 //generate seed data using faker
 let data = (num)=> {
     var neighborhoodArray =[];
-    for (var j=0; j < nearbyImages.length; j++){
-      var images = nearbyImages[j];
-    }
     for(var i=0; i<num; i++){
        
       var neighborhoodObj ={}

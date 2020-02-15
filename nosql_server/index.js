@@ -4,7 +4,8 @@ const path = require('path');
 const app = express();
 // Set a constant for the port that our express server will listen on
 const PORT = 3001;
-const database = require('../database/index.js');
+const database = require('../nosql_db/index.js');
+// const database = require('../sql_db/index.js');
 
 app.use(express.json());
 
