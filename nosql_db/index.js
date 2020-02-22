@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
-const fakedata = require('./fakedata.js');
-const crypto = require('crypto');
-const data = fakedata.data;
+const user = require('../lib/user.js');
+const seedData = require('./seedData.js');
+const createListings = seedData.createListings;
 
 //connnect to mongodb and create a db called 7-xillow
-mongoose.connect('mongodb://localhost/7-xillow', {useMongoClient: true}); // CHANGE THIS YOU SILLY CHILD
+mongoose.connect('mongodb://localhost/neighborhoods'); // CHANGE THIS YOU SILLY CHILD
 mongoose.connection.dropDatabase();
+
 let neighborhoodSchema = mongoose.Schema({
   name: String,
   valueShift: Number,
@@ -13,15 +14,17 @@ let neighborhoodSchema = mongoose.Schema({
   zestimate: Number,
   walkScore: Number,
   transitScore: Number,
-  listings: [{
-    userName: String,
-    address: String,
-    map: String,
-    price: Number,
-    sqft: Number,
-    bedrooms: Number,
-    bathrooms: Number
-  }]
+  listings: [listingSchema]
+});
+
+let listingSchema = mongoose.Schema({
+  userId: String,
+  address: String,
+  map: String,
+  price: Number,
+  sqft: Number,
+  bedrooms: Number,
+  bathrooms: Number
 });
 
 let Neighborhoods = mongoose.model('Neighborhoods', neighborhoodSchema);
@@ -33,44 +36,6 @@ let userSchema = mongoose.Schema({
 });
 
 let Users = mongoose.model('Users', userSchema);
-
-// legacy CRUD
-// let save = (listing)=> {
-//   var newListing = Neighborhoods ({
-//     neighborhood: listing.neighborhood,
-//     mapImage: listing.mapImage,
-//     walk_score: listing.walk_score,
-//     transit_score: listing.transit_score,
-//     price:listing.price,
-//     sqft: listing.sqft,
-//     bedNumber: listing.bedNumber,
-//     bathNumner: listing.bathNumner,
-//     address: listing.address,
-//     nearbyImage: listing.nearbyImage    
-//   });
-
-//   newListing.save((err) => {
-//       if(err) {
-//           console.log(err);
-//       } else {
-//           console.log(`created listing at ${listing.address}!`);
-//       }
-//   });
-// }
-
-// //to fetech data from the db
-// let fetch = (callback) => {
-//     //get something from the database ...
-//   Houses.find((err, documents) => {
-//     if(err) {
-//       callback (err)
-//     } else {
-//       callback( null, documents)
-//     }
-//   });
-// }
-
-/* WRYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY */
 
 /*
  * neighborhood: {
@@ -105,37 +70,42 @@ let saveNeighborhood = (neighborhood, callback) => {
 }
 
 /*
- * neighborhoodName: String
+ * neighborhoodName: String,
+ * username: String,
+ * password: String,
  * listing: {
  *   address: String,
  *   price: Number,
  *   map: String,
  *   sqft: Number,
  *   bedrooms: Number,
- *   bathrooms: Number,
- * 
- *   username: String,
- *   password: String
+ *   bathrooms: Number
  * }
  */
-let saveListing = (neighborhoodName, listing, callback) => {
-
-
-
-  Neighborhoods.findOne({name: neighborhoodName}, (err, neighborhood) => {
-    if (err) {
+let saveListing = (neighborhoodName, username, password, listing, callback) => {
+  Users.findOne({userName: username}, (err, userInfo) => {
+    if(err) {
       callback(err);
-      // console.log(err);
     }
-    var listings = neighborhood.listings.push(listing);
-    Neighborhoods.updateOne({name: neighborhoodName}, {listings: listings}, (err) => {
-      if (err) {
-        callback(err);
-        // console.log(err);
-      }
-      callback(null);
-      // console.log(`listing at ${listing.address} added to ${neighborhood.name}`);
-    });
+    if(user.compare(password, userInfo.hash, userInfo.salt)) {
+      Neighborhoods.findOne({name: neighborhoodName}, (err, neighborhood) => {
+        if (err) {
+          callback(err);
+          // console.log(err);
+        }
+        var listings = neighborhood.listings.push(listing);
+        Neighborhoods.updateOne({name: neighborhoodName}, {listings: listings}, (err) => {
+          if (err) {
+            callback(err);
+            // console.log(err);
+          }
+          callback(null);
+          // console.log(`listing at ${listing.address} added to ${neighborhood.name}`);
+        });
+      });
+    } else {
+      callback(new Error('invalid login'));
+    }
   });
 }
 
@@ -213,32 +183,44 @@ let updateNeighborhood = (neighborhoodName, info, callback) => {
 
 /*
  * neighborhoodName: String
- * info: Object
+ * address: String
+ * info: Object,
+ * username: String,
+ * password: String,
  * callback: Function
  */
-let updateListing = (neighborhoodName, address, info, callback) => {
-  Neighborhoods.findOne({name: neighborhoodName}, (err, neighborhood) => {
-    if (err) {
+let updateListing = (neighborhoodName, address, info, username, password, callback) => {
+  Users.findOne({userName: username}, (err, userInfo) => {
+    if(err) {
       callback(err);
     }
-    var updatedListing;
-    var updatedList = neighborhood.listings;
-    for (var [ind, listing] of neighborhood.listings.entries()) {
-      if (listing.address === address) {
-        updatedListing = listing;
-        for (var entry in listing) {
-          updatedListing[entry] = info[entry];
-          updatedList[ind] = updatedListing;
-        }
-      }
-    }
-
-    Neighborhoods.updateOne({name: neighborhoodName}, {listings: updatedList}, (err) => {
+    if(user.compare(password, userInfo.hash, userInfo.salt)) {
+    Neighborhoods.findOne({name: neighborhoodName}, (err, neighborhood) => {
       if (err) {
         callback(err);
       }
-      callback(null);
+      var updatedListing;
+      var updatedList = neighborhood.listings;
+      for (var [ind, listing] of neighborhood.listings.entries()) {
+        if (listing.address === address) {
+          updatedListing = listing;
+          for (var entry in listing) {
+            updatedListing[entry] = info[entry];
+            updatedList[ind] = updatedListing;
+          }
+        }
+      }
+
+      Neighborhoods.updateOne({name: neighborhoodName}, {listings: updatedList}, (err) => {
+        if (err) {
+          callback(err);
+        }
+        callback(null);
+      });
     });
+  } else {
+      callback(new Error('invalid login'));
+    }
   });
 }
 
@@ -259,62 +241,74 @@ let deleteNeighborhood = (neighborhoodName, callback) => {
  * neighborhoodName: String
  * callback: Function
  */
-let deleteListing = (neighborhoodName, address, callback) => {
-  Neighborhoods.findOne({name: neighborhoodName}, (err, neighborhood) => {
-    if (err) {
+let deleteListing = (neighborhoodName, address, username, password, callback) => {
+  Users.findOne({userName: username}, (err, userInfo) => {
+    if(err) {
       callback(err);
     }
-    var updatedListings = neighborhood.listings.length;
-    var spliceHere;
-    for (var i = 0; i < updatedListings.length; i++) {
-      if(updatedListings[i].address === address) {
-        spliceHere = i;
-      }
+    if(user.compare(password, userInfo.hash, userInfo.salt)) {
+      Neighborhoods.findOne({name: neighborhoodName}, (err, neighborhood) => {
+        if (err) {
+          callback(err);
+        }
+        var updatedListings = neighborhood.listings.length;
+        var spliceHere;
+        for (var i = 0; i < updatedListings.length; i++) {
+          if(updatedListings[i].address === address) {
+            spliceHere = i;
+          }
+        }
+
+        updatedListings.splice(spliceHere, 1);
+
+        Neighborhoods.updateOne({name: neighborhoodName}, {listings: updatedListings}, (err) => {
+          if (err) {
+            callback(err);
+          }
+          callback(null);
+        });
+      });
+  } else {
+      callback(new Error('invalid login'));
     }
-
-    updatedListings.splice(spliceHere, 1);
-
-    Neighborhoods.updateOne({name: neighborhoodName}, {listings: updatedListings}, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-  })
+  });
 }
 
-/* WRYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY */
+let login = (username, password, callback) => {
+  Users.findOne({userName: username}, (err, userInfo) => {
+    if(err) {
+      callback(err);
+    }
+    if(user.compare(password, userInfo.hash, userInfo.salt)) {
+      callback();
+    } else {
+      callback(new Error('invalid login'));
+    }
+  });
+}
 
-// AH'M NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOKLEAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-//seed mock data
-// var neighborhoodInfo = data(100);
-// neighborhoodInfo.forEach(listing => save(listing));
+let seedDatabase = () => {
+  var users = [];
+  var data = createListings(users);
 
-// let update = (listing) => {
-//   Houses.replaceOne({address: listing.address}, listing, {upsert: true}, (err) => {
-//     if(err) {
-//         console.log(err);
-//     } else {
-//         console.log(`listing at ${listing.address} updated!`);
-//     }
-//   });
-// }
+  console.log('seeding...');
 
-// let remove = (listing) => {
-//   Houses.findOneAndDelete(listing, (err) => {
-//     if(err) {
-//         console.log(err);
-//     } else {
-//         console.log(`listing at ${listing.address} deleted!`);
-//     }
-//   });
-// }
+  Users.insertMany(users, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Created users table');
+    }
+  });
 
-// crud
-// module.exports.save = save;
-// module.exports.fetch = fetch;
-// module.exports.update = update;
-// module.exports.remove = remove;
+  Neighborhoods.insertMany(data, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Created listings table');
+    }
+  });
+}
 
 // CRUD
 module.exports.saveNeighborhood = saveNeighborhood;
@@ -327,3 +321,4 @@ module.exports.updateNeighborhood = updateNeighborhood;
 module.exports.updateListing = updateListing;
 module.exports.deleteNeighborhood = deleteNeighborhood;
 module.exports.deleteListing = deleteListing;
+module.exports.seedDatabase = seedDatabase;
