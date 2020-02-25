@@ -42,21 +42,21 @@ CREATE TABLE users (
     PRIMARY KEY(id)
 );
 
-LOAD DATA LOCAL INFILE '/home/andrewsong1122/GitHub/sdc/neighborhood/houses.csv'
+LOAD DATA LOCAL INFILE '/home/ubuntu/sdc/neighborhood/houses.csv'
 INTO TABLE houses
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (id, user, neighborhood, map, price, sqft, beds, baths, street_address, street_name, city, state, zip_code);
 
-LOAD DATA LOCAL INFILE '/home/andrewsong1122/GitHub/sdc/neighborhood/neighborhoods.csv'
+LOAD DATA LOCAL INFILE '/home/ubuntu/sdc/neighborhood/neighborhoods.csv'
 INTO TABLE neighborhoods
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (id, name, value_shift, predicted_shift, zestimate, walk_score, transit_score);
 
-LOAD DATA LOCAL INFILE '/home/andrewsong1122/GitHub/sdc/neighborhood/users.csv'
+LOAD DATA LOCAL INFILE '/home/ubuntu/sdc/neighborhood/users.csv'
 INTO TABLE users
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'

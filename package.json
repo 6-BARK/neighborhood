@@ -11,8 +11,7 @@
   },
   "scripts": {
     "react-dev": "webpack --watch",
-    "server-dev": "nodemon nosql_server/index.js",
-    "seed": "nodemon server/index.js",
+    "server-dev": "nodemon sql_server/index.js",
     "test": "jest",
     "sql-csv": "node sql_db/seedData.js",
     "seed-sqldb": "mysql -u root < sql_db/schema.sql",
@@ -26,6 +25,8 @@
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "mongoose": "^5.8.10",
+    "mysql": "^2.18.1",
+    "newrelic": "^6.4.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "^3.3.0",
