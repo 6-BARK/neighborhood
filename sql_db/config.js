@@ -1,5 +1,5 @@
 module.exports = {
-    host: 'ec2-13-52-55-232.us-west-1.compute.amazonaws.com',
+    host: '13.52.55.232',
     user: 'xillow',
     password: 'neighborhood',
     database: 'listings'
