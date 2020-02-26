@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const db = require('../sql_db/index.js');
 
-const PORT = 3000;
+const PORT = 3003;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
