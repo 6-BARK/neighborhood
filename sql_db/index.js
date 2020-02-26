@@ -7,6 +7,7 @@ const getHouseInfo = (houseId, callback) => {
     // connection.query(`SELECT * FROM houses WHERE id=${houseId}`, (err, listingInfo) => {
     connection.query(`SELECT * FROM houses FORCE KEY (PRIMARY) WHERE id=${houseId}`, (err, listingInfo) => {
         if(err) {
+            console.log('ur mum gey');
             callback(err);
         } else {
             callback(null, listingInfo);
