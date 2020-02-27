@@ -131,7 +131,7 @@ showLessnearbyhouse (event) {
     })
 }
     render() {
-        var address = `${this.state.street_address} ${this.address.street_name}, ${this.state.city}, ${this.state.state} ${this.state.zip_code}`;
+        var address = `${this.state.street_address} ${this.state.street_name}, ${this.state.city}, ${this.state.state} ${this.state.zip_code}`;
         return (
             <Body> 
             <Title>Neighborhood: {this.state.neighborhood}</Title>
