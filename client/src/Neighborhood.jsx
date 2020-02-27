@@ -11,15 +11,21 @@ class App extends React.Component {
     constructor(props) {
          super(props)
         this.state = {
-            number: 0, 
-            mapImage : '<img src="https://7-xillow.s3-us-west-1.amazonaws.com/nearbyHouse1.png" />',
+            id: 10000000, 
+            user: 0,
+            neighborhood: 0,
+            map: '<img src="https://7-xillow.s3-us-west-1.amazonaws.com/nearbyHouse1.png" />',
             walk_score:0,
             transit_score:0,
             price: 0,
             sqft:0,
-            bedNumber:0,
-            bathNumber:0,
-            address: '',
+            beds:0,
+            baths:0,
+            street_address: 0,
+            street_name: '',
+            city: '',
+            state: '',
+            zip_code: '',
             nearbyImage:'',
             buttonclicked: false,
             buttonText: 'See more neighborhood details',
@@ -44,23 +50,12 @@ class App extends React.Component {
     
     //function to get data from the database 
 getNeighborhoodNumber() {
-    axios.get ('./listings')
+    axios.get (`./api/listings/${this.state.id}`)
     .then( (response)=>{
 
-    console.log(response.data[1].address)
+    console.log(response.data)
     //set new state
-    this.setState ({
-        number : response.data[1].neighborhood,
-        mapImage: response.data[0].mapImage,
-        walk_score: response.data[0].walk_score,
-        transit_score: response.data[0].transit_score,
-        price: response.data[0].price,
-        sqft: response.data[0].sqft,
-        bedNumber: response.data[0].bedNumber,
-        bathNumber: response.data[0].bathNumber,
-        address: response.data[0].address,
-        nearbyImage: response.data[0].nearbyImage
-    })
+    this.setState (response.data[0])
   })
   .catch( (error)=> {
     console.log(error);
@@ -139,8 +134,8 @@ showLessnearbyhouse (event) {
         console.log(this.state.address)
         return (
             <Body> 
-            <Title>Neighborhood: {this.state.number}</Title>
-            <NeighborSummary number = {this.state.number} /> 
+            <Title>Neighborhood: {this.state.neighborhood}</Title>
+            <NeighborSummary number = {this.state.neighborhood} /> 
         <Label onClick = {this.onbuttonClick} style ={{color: '#346eeb'}}>
             <Para>
             {this.state.svgIconMore} 
