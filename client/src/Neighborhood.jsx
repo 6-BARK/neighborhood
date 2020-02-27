@@ -131,7 +131,7 @@ showLessnearbyhouse (event) {
     })
 }
     render() {
-        console.log(this.state.address)
+        var address = `${this.state.street_address} ${this.address.street_name}, ${this.state.city}, ${this.state.state} ${this.state.zip_code}`;
         return (
             <Body> 
             <Title>Neighborhood: {this.state.neighborhood}</Title>
@@ -167,9 +167,9 @@ showLessnearbyhouse (event) {
                 walkscore = {this.state.walk_score} transitscore = {this.transit_score} />
                 <h2>Nearby homes</h2>
                 <div>
-                    <Nearbyhomes images = {this.state.nearbyImage}  address = {this.state.address}/>
+                    <Nearbyhomes images = {this.state.nearbyImage}  address = {address}/>
                     <Wide> </Wide>
-                    <Nearbyhomestwo images = {this.state.nearbyImage} address = {this.state.address}/>
+                    <Nearbyhomestwo images = {this.state.nearbyImage} address = {address}/>
                 </div>
         
                 <Label onClick ={this.onnearbyhouseClick}style = {{color: '#346eeb'}}>
@@ -182,9 +182,9 @@ showLessnearbyhouse (event) {
                     </Label>
                 {this.state.nearbyButtonMore === true &&
                         <div>
-                    <Nearbyhomes images = {this.state.nearbyImage}  address= {this.state.address}/>
+                    <Nearbyhomes images = {this.state.nearbyImage}  address= {address}/>
                         <Wide> </Wide>
-                        <Nearbyhomestwo images = {this.state.nearbyImage} address = {this.state.address}/>
+                        <Nearbyhomestwo images = {this.state.nearbyImage} address = {address}/>
                         </div>
                     }
                 <Label onClick= {this.showLessnearbyhouse} style = {{color: '#346eeb'}}>
