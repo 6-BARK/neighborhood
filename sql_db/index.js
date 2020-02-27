@@ -4,7 +4,6 @@ const mysqlConfig = require('./config.js');
 const connection = mysql.createConnection(mysqlConfig);
 
 const getHouseInfo = (houseId, callback) => {
-    // connection.query(`SELECT * FROM houses WHERE id=${houseId}`, (err, listingInfo) => {
     connection.query(`SELECT * FROM houses FORCE KEY (PRIMARY) WHERE id=${houseId}`, (err, listingInfo) => {
         if(err) {
             console.log(err);
