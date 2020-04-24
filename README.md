@@ -1,23 +1,31 @@
-# Project Name
+# Neighborhood
 
-> Project description
+> Database and API for storing and retrieving neighborhood information for real estate listing pages.
 
 ## Related Projects
 
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-
-## Table of Contents
-
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
-
+  - https://github.com/6-BARK
+  
 ## Usage
 
-> Some usage instructions
+1. Install dependencies.
+
+```sh
+npm install
+```
+2. Start webpack if adjusting user interface.
+```sh
+npm run react-dev
+```
+3. Generate csv files of with random data and load them into MySQL tables.
+```sh
+npm run sql-csv
+npm run seed-sqldb
+```
+4. Start server. Default port is 3003.
+```sh
+npm run server-dev
+```
 
 ### API routes
 
